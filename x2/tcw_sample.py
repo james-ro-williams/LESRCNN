@@ -116,7 +116,7 @@ def sample(net, device, dataset, cfg):
     mean_ssim = 0 #tcw20190413047
     i = 0
     for step, (hr, lr, name) in enumerate(dataset):
-        if "DIV2K" in dataset.name:
+        if "elephant" in dataset.name:
             t1 = time.time()
             h, w = lr.size()[1:]
             h_half, w_half = int(h/2), int(w/2)
