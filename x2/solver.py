@@ -89,7 +89,7 @@ class Solver():
                 
                 self.optim.zero_grad()
                 loss.backward()
-                nn.utils.clip_grad_norm(self.refiner.parameters(), cfg.clip) #tcw it is drop out, which can prevent overfitting.
+                nn.utils.clip_grad_norm_(self.refiner.parameters(), cfg.clip) #tcw it is drop out, which can prevent overfitting.
                 self.optim.step()
 
                 learning_rate = self.decay_learning_rate()
