@@ -7,7 +7,7 @@ import numpy as np
 from collections import OrderedDict
 import torch
 import torch.nn as nn
-import skimage.measure as measure #tcw201904101622tcw
+import skimage.metrics as metrics
 from torch.autograd import Variable
 from dataset import TestDataset
 from PIL import Image
@@ -43,7 +43,7 @@ def psnr(im1, im2): #tcw201904101621
         
     im1 = im2double(im1)
     im2 = im2double(im2)
-    psnr = measure.compare_psnr(im1, im2, data_range=1)
+    psnr = metrics.peak_signal_noise_ratio(im1, im2, data_range=1)
     return psnr
 #tcw20190413043
 def calculate_ssim(img1, img2, border=0):
