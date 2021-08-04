@@ -2,7 +2,8 @@ import os
 import random
 import numpy as np
 import scipy.misc as misc
-import skimage.measure as measure
+import skimage.metrics as metrics
+
 from tensorboardX import SummaryWriter
 import torch
 import torch.nn as nn
@@ -41,7 +42,7 @@ class Solver():
         #the ways of chosen GPU
         #the first way
         os.environ['CUDA_VISIBLE_DEVICES']='0,1'
-        self.device = torch.device("cuda:0,1" if torch.cuda.is_available() else "cpu") #tcw201904100941, cuda:1 denotes the GPU of number 1. cuda:0 denotes the GPU of number 0.
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #tcw201904100941, cuda:1 denotes the GPU of number 1. cuda:0 denotes the GPU of number 0.
         #automically choose the GPU, if torch.device("cuda" if torch.cuda.is_available() else "cpu")
         #"The second way is as follows--------------------------"
         #self.device = torch.device('cuda',1) #the commod is added by tcw 201904100942
@@ -88,7 +89,7 @@ class Solver():
                 
                 self.optim.zero_grad()
                 loss.backward()
-                nn.utils.clip_grad_norm(self.refiner.parameters(), cfg.clip) #tcw it is drop out, which can prevent overfitting.
+                nn.utils.clip_grad_norm_(self.refiner.parameters(), cfg.clip) #tcw it is drop out, which can prevent overfitting.
                 self.optim.step()
 
                 learning_rate = self.decay_learning_rate()
@@ -98,15 +99,15 @@ class Solver():
                 self.step += 1
                 if cfg.verbose and self.step % cfg.print_interval == 0:
                     if cfg.scale > 0:
-                        psnr = self.evaluate("dataset/Urban100", scale=cfg.scale, num_step=self.step)
+                        psnr = self.evaluate("/content/elephants/test", scale=cfg.scale, num_step=self.step)
                         #print 'sdffffffffffff232'
-                        self.writer.add_scalar("Urban100", psnr, self.step) #save the data in the file of writer, which is shown via visual figures.
+                        self.writer.add_scalar("test", psnr, self.step) #save the data in the file of writer, which is shown via visual figures.
                         #The first parameter is figure name, the second parameter is axis Y, the third parameter is axis X.  
                     else:    
-                        psnr = [self.evaluate("dataset/Urban100", scale=i, num_step=self.step) for i in range(2, 5)]
-                        self.writer.add_scalar("Urban100_2x", psnr[0], self.step)
-                        self.writer.add_scalar("Urban100_3x", psnr[1], self.step)
-                        self.writer.add_scalar("Urban100_4x", psnr[2], self.step)
+                        psnr = [self.evaluate("/content/elephants/test", scale=i, num_step=self.step) for i in range(2, 5)]
+                        self.writer.add_scalar("test_2x", psnr[0], self.step)
+                        self.writer.add_scalar("test_3x", psnr[1], self.step)
+                        self.writer.add_scalar("test_4x", psnr[2], self.step)
                             
                     self.save(cfg.ckpt_dir, cfg.ckpt_name)
 
@@ -184,7 +185,7 @@ class Solver():
             mean_ssim += calculate_ssim(im1,im2)/len(test_data)
             #mean_psnr1 += psnr(im3, im4) / len(test_data)
             #print 'step is %d, mean_psnr is %f' %(step,mean_psnr)
-        print 'epochs is %d, mean_psnr is %f, mean_ssim is %f' %(self.step,mean_psnr,mean_ssim)
+        print("Epoch: {}, M-PSNR: {}, M-SSIM: {}".format(self.step, mean_psnr, mean_ssim))
         #print 'epochs is %d, mean_psnr is %f' %(self.step,mean_psnr1)
         #print mean_psnr#, mean_psnr1
         return mean_psnr
@@ -246,7 +247,7 @@ def psnr(im1, im2):
         
     im1 = im2double(im1)
     im2 = im2double(im2)
-    psnr = measure.compare_psnr(im1, im2, data_range=1)
+    psnr = metrics.peak_signal_noise_ratio(im1, im2, data_range=1)
     return psnr
 #tcw20190413022tcw
 def calculate_ssim(img1, img2, border=0):
