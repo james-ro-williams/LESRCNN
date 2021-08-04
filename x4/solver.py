@@ -39,7 +39,7 @@ class Solver():
                                        num_workers=0,
                                        shuffle=True, drop_last=True)
 
-        print("{} training images.".format(len(self.train_loader)))
+        print("{} training images.".format(len(self.train_data)))
         
         #the ways of chosen GPU
         #the first way
