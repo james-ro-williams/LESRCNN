@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--ckpt_path", type=str)
     parser.add_argument("--group", type=int, default=1)
     parser.add_argument("--sample_dir", type=str)
-    parser.add_argument("--test_data_dir", type=str, default="dataset/Urban100")
+    parser.add_argument("--test_data_dir", type=str, default="/content/elephants/test/")
     parser.add_argument("--cuda", action="store_true")
     parser.add_argument("--scale", type=int, default=4)
     parser.add_argument("--shave", type=int, default=20)
@@ -200,7 +200,7 @@ def main(cfg):
         new_state_dict[name] = v
 
     net.load_state_dict(new_state_dict)
-    device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu") #0 is number of gpu, if this gpu1 is work, you can set it into 1 (device=torch.device("cuda:1" if torch.cuda.is_available() else "cpu"))
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") #0 is number of gpu, if this gpu1 is work, you can set it into 1 (device=torch.device("cuda:1" if torch.cuda.is_available() else "cpu"))
     net = net.to(device)
     dataset = TestDataset(cfg.test_data_dir, cfg.scale)
     sample(net, device, dataset, cfg)
