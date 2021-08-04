@@ -38,6 +38,8 @@ class Solver():
                                        batch_size=cfg.batch_size,
                                        num_workers=0,
                                        shuffle=True, drop_last=True)
+
+        print("{} training images.".format(len(self.train_loader)))
         
         #the ways of chosen GPU
         #the first way
