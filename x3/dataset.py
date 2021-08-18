@@ -81,8 +81,8 @@ class TestDataset(data.Dataset):
         self.name  = dirname.split("/")[-1]
         self.scale = scale
         
-        self.hr = glob.glob('/content/elephants/test/HR/*jpg')
-        self.lr = glob.glob('/content/elephants/test/'+str(self.scale)+'x/*jpg')
+        self.hr = glob.glob(dirname + '/HR/*jpg')
+        self.lr = glob.glob(dirname + '/' + str(self.scale)+'x/*jpg')
 
         self.hr.sort()
         self.lr.sort()
