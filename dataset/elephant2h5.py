@@ -6,7 +6,7 @@ import numpy as np
 
 import imageio
 
-dataset_dir_train= "/content/elephants/train/"
+dataset_dir_train= "./elephants/train/"
 dataset_type = "train"
 
 f = h5py.File("elephant_{}.h5".format(dataset_type), "w") #create a file with '.h5'
