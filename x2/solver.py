@@ -101,12 +101,12 @@ class Solver():
                 self.step += 1
                 if cfg.verbose and self.step % cfg.print_interval == 0:
                     if cfg.scale > 0:
-                        psnr = self.evaluate("/content/elephants/test", scale=cfg.scale, num_step=self.step)
+                        psnr = self.evaluate("./elephants/test", scale=cfg.scale, num_step=self.step)
                         #print 'sdffffffffffff232'
                         self.writer.add_scalar("test", psnr, self.step) #save the data in the file of writer, which is shown via visual figures.
                         #The first parameter is figure name, the second parameter is axis Y, the third parameter is axis X.  
                     else:    
-                        psnr = [self.evaluate("/content/elephants/test", scale=i, num_step=self.step) for i in range(2, 5)]
+                        psnr = [self.evaluate("./elephants/test", scale=i, num_step=self.step) for i in range(2, 5)]
                         self.writer.add_scalar("test_2x", psnr[0], self.step)
                         self.writer.add_scalar("test_3x", psnr[1], self.step)
                         self.writer.add_scalar("test_4x", psnr[2], self.step)
