@@ -21,7 +21,7 @@ def parse_args():
     parser.add_argument("--ckpt_path", type=str)
     parser.add_argument("--group", type=int, default=1)
     parser.add_argument("--sample_dir", type=str)
-    parser.add_argument("--test_data_dir", type=str, default="/content/elephants/test/")
+    parser.add_argument("--test_data_dir", type=str, default="./elephants/test/")
     parser.add_argument("--cuda", action="store_true")
     parser.add_argument("--scale", type=int, default=4)
     parser.add_argument("--shave", type=int, default=20)
